@@ -1,0 +1,1 @@
+(()=>{const b=document.getElementById('mb'),m=document.getElementById('menu');b.onclick=()=>{const o=m.classList.toggle('open');b.setAttribute('aria-expanded',o)};document.addEventListener('click',e=>{if(!m.contains(e.target)&&e.target!==b){m.classList.remove('open');b.setAttribute('aria-expanded',false)}})})();
