@@ -52,3 +52,5 @@ footer a{margin-right:14px;display:inline-block;padding:4px 0}
 .ill{float:right;margin:0 0 10px 16px;max-width:42%;height:auto}@media(max-width:700px){.ill{float:none;display:block;margin:10px 0}}
 .lg{vertical-align:middle;margin-right:8px;flex:none}.logo{display:inline-flex;align-items:center}
 article h2{margin-top:1.8em}.prose::after{content:"";display:block;clear:both}
+.tile{display:flex;align-items:center;gap:14px}.ti{flex:none;width:44px;height:44px;border-radius:12px;background:var(--bg);color:var(--pri);display:grid;place-items:center;border:1px solid var(--line)}
+.tile:hover .ti{background:var(--pri);color:#fff}
