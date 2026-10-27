@@ -40,12 +40,18 @@ $("go").onclick=async()=>{
  if(mode==="pct"){const p=(+$("pct").value||100)/100;w*=p;h*=p}
  if(mode!=="kb"){blob=await blobOf(draw(w,h,t),t,.92)}
  else{
-  const max=(+$("kb").value||100)*1024;let s=1;
-  for(let n=0;n<8;n++){
-   const c=draw(w*s,h*s,t);
-   if(t==="image/png"){blob=await blobOf(c,t)}
-   else{let lo=.05,hi=.95;for(let k=0;k<7;k++){const m=(lo+hi)/2;blob=await blobOf(c,t,m);blob.size>max?hi=m:lo=m}blob=await blobOf(c,t,lo)}
-   if(blob.size<=max)break;s*=.8;
+  const max=(+$("kb").value||100)*1024;
+  const fixed=!!D.w;
+  const scales=fixed?[1]:[1,.85,.7,.55,.45,.35,.28,.22,.17,.13,.1,.07,.05];
+  const minQ=fixed?.05:.5;
+  for(let n=0;n<scales.length;n++){
+   const c=draw(w*scales[n],h*scales[n],t);
+   if(t==="image/png"){blob=await blobOf(c,t);if(blob.size<=max)break;continue}
+   blob=await blobOf(c,t,minQ);
+   if(blob.size>max){if(n===scales.length-1)break;continue}
+   let lo=minQ,hi=.95;
+   for(let k=0;k<7;k++){const m=(lo+hi)/2;const bb=await blobOf(c,t,m);if(bb.size>max)hi=m;else{lo=m;blob=bb}}
+   break;
   }
  }
  if(url)URL.revokeObjectURL(url);
@@ -57,5 +63,6 @@ $("go").onclick=async()=>{
  $("out").style.display="block";$("go").disabled=false;$("go").textContent="Resize Image";
 };
 if(D.mode==='kb'){document.querySelector('[data-m=kb]').click();$('kb').value=D.kb}
+if(D.mode==='pct'){document.querySelector('[data-m=pct]').click()}
 if(D.w){$('w').value=D.w;$('h').value=D.h;$('lock').checked=false}
 })();
